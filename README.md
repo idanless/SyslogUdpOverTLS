@@ -16,7 +16,7 @@
 
 <p>&nbsp;</p>
 
-<p><strong><u>to do:</u></strong></p>
+<p><strong><u>todoist:</u></strong></p>
 
 <ol>
 	<li><u>client-side</u> certificate</li>
