@@ -1,9 +1,9 @@
 import ssl,socket
 import sys
 import time
-import queue
 import socket
 from datetime import date,datetime
+import argparse
 
 #date time\now when the script is run
 today = date.today()
@@ -59,7 +59,6 @@ class SockSSL(SyslogUDPHandler):
 
 
 
-
     def opennSSL(self):
         print(self.host, self.port)
         self.OpenTcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -93,11 +92,24 @@ class SockSSL(SyslogUDPHandler):
 
 
 
+Menu = argparse.ArgumentParser(fromfile_prefix_chars='@')
+Menu.add_argument('--Syslog_port', action='store', type=int,default=514,help='by default 514' )
+Menu.add_argument('--IP_syslog', action='store', type=str,default='0.0.0.0',help='by default 0.0.0.0 any interface')
+Menu.add_argument('--dstportSSL', action='store', type=int,required=True,help='destination port on SSL Server')
+Menu.add_argument('--verifiySSL', action='store', type=str,default=True,help='if you use self signed certificate or ip for dstIP set it on false ')
+Menu.add_argument('--dstIP', action='store', type=str,default=True,required=True,help='IP or Domain recommended use Domain')
 
 
-s = SockSSL(HOST='IP',PORT=6516,verify=False)
-s.set_ip_port(ip='IP',port=7777)
-s.Runserver()
-s.opennSSL()
+args = Menu.parse_args()
+
+print('Config',args)
+if args:
+    try:
+        s = SockSSL(HOST=args.dstIP, PORT=args.dstportSSL, verify=args.verifiySSL)
+        s.set_ip_port(ip=args.IP_syslog, port=args.Syslog_port)
+        s.Runserver()
+        s.opennSSL()
+    except KeyboardInterrupt:
+        print('Stop')
 
 
